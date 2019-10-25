@@ -5,7 +5,9 @@
 using namespace std;
 
 void Dictionary::bulkInsert(int n, string *keys) {
-  
+  for ( int i = 0; i < n; i++){
+    linearInsert( *(keys + i) );
+  }
 }
 
 void Dictionary::insert(string key) {
@@ -14,7 +16,7 @@ void Dictionary::insert(string key) {
 
   //collision aka vector is not empty
   if ( this->hashTable.at(index).empty() ){
-
+    
     //hash again
     long long int indexTwo = hashTwo(key);
     this->hashTable.at(index).at(indexTwo) = key; 
@@ -25,7 +27,9 @@ void Dictionary::insert(string key) {
     //insert at first position of vector
     this->hashTable.at(index).at(0) = key;
   }
+}
 
+void Dictionary::linearInsert(string key){
   
 }
 

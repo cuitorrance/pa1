@@ -19,6 +19,8 @@ public:
     // Handle collision with separate chaining.
     void insert(string key);
 
+    void linearInsert(string key);
+  
     // Remove a key from the dictionary, if it exists.
     void remove(string key);
 

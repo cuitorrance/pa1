@@ -24,6 +24,8 @@ int main()
 
     // Find "Lauren Bacall" in the dictionary.
     cout << dict.find("Lauren Bacall") << endl;
+
+    dict.printDict();
     
     return 0;
 }
