@@ -4,9 +4,9 @@ using namespace std;
 
 
 class Dictionary {
+private:
+  vector< vector<string> > hashTable;
 public:
-
-    vector< vector<string> > hashTable;
   
     // Insert an input set of n keys to the dictionary. This method should print out the following information:
     // 1. The hash functions comprising the perfect hash (both levels)
@@ -27,8 +27,11 @@ public:
     bool find(string key);
 
     // hash function 
-    long long hashOne(string const &s);
+    long long int hashOne(const string &s);
 
-    long long hashTwo(string const &s);
+    //second hash function
+    long long int hashTwo(const string &s);
+
+    //print hashtable
+    void printDict();
 };
-

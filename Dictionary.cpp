@@ -1,6 +1,7 @@
 // Implement Dictionary methods.
 #include "Dictionary.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 void Dictionary::bulkInsert(int n, string *keys) {
@@ -9,20 +10,20 @@ void Dictionary::bulkInsert(int n, string *keys) {
 
 void Dictionary::insert(string key) {
 
-  long long index = hashOne(key);
+  long long int index = hashOne(key);
 
   //collision aka vector is not empty
-  if ( this.hashTable.at(index).empty() ){
+  if ( this->hashTable.at(index).empty() ){
 
     //hash again
-    long long indexTwo = hashTwo(key);
-    this.hashTable.at(index).at(indexTwo) = key; 
+    long long int indexTwo = hashTwo(key);
+    this->hashTable.at(index).at(indexTwo) = key; 
     
   //no collision aka vector is empty
   }else{
     
     //insert at first position of vector
-    this.hashTable.at(index).at(0) = key;
+    this->hashTable.at(index).at(0) = key;
   }
 
   
@@ -39,14 +40,23 @@ bool Dictionary::find(string key) {
     return false;
 }
 
-long long hashOne(string const &s){
-    long long hash_value = 0;
+long long int Dictionary::hashOne(const string &s){
+    long long int hash_value = 0;
     
     return hash_value;
 }
 
-long long hashTwo(string const &s){
-  long long hash_value = 0;
+long long int Dictionary::hashTwo(const string &s){
+    long long int hash_value = 0;
 
-  return hash_value;
+    return hash_value;
+
+}
+void Dictionary::printDict(){
+  for ( vector< vector<string> >::size_type i = 0; i < this->hashTable.size(); i++){
+    for (vector< vector<string> >::size_type j = 0; j < this->hashTable[i].size(); j++){
+      cout << this->hashTable[i][j] << " - ";
+    }
+    cout << endl;
+  }
 }
