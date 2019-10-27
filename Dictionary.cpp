@@ -2,34 +2,29 @@
 #include "Dictionary.h"
 #include <string>
 #include <iostream>
+#include <bitset>
+#include <math.h>
+#include <cmath>
 using namespace std;
 
 void Dictionary::bulkInsert(int n, string *keys) {
-  for ( int i = 0; i < n; i++){
-    linearInsert( *(keys + i) );
+
+  //size of first level hash
+  int m = pow(2, n);
+
+  //go through keys 
+  for (int i = 0; i < n; i++){
+    //first level hash
+    int firstHash = hashOne(m, *(keys+i) );
+    
+    
   }
+  
+  
 }
 
 void Dictionary::insert(string key) {
 
-  long long int index = hashOne(key);
-
-  //collision aka vector is not empty
-  if ( this->hashTable.at(index).empty() ){
-    
-    //hash again
-    long long int indexTwo = hashTwo(key);
-    this->hashTable.at(index).at(indexTwo) = key; 
-    
-  //no collision aka vector is empty
-  }else{
-    
-    //insert at first position of vector
-    this->hashTable.at(index).at(0) = key;
-  }
-}
-
-void Dictionary::linearInsert(string key){
   
 }
 
@@ -44,23 +39,46 @@ bool Dictionary::find(string key) {
     return false;
 }
 
-long long int Dictionary::hashOne(const string &s){
-    long long int hash_value = 0;
+int Dictionary::hashOne(int m, const string &s){
+    int hash_value = 0;
+    int key = getBinaryASCII(s);
+
+    //generate random matrix of ceiling (log_2(m) x 64)
+    int rows = ceil( log2(m) * 64 );
+    int cols = 64;
+    int hFunction [rows][cols];  
+    for ( int i = 0; i < rows; i++){
+      for ( int j = 0; j < cols; j++){
+	
+      }
+    }
+    
+
     
     return hash_value;
 }
 
-long long int Dictionary::hashTwo(const string &s){
+int Dictionary::hashTwo(const string &s){
     long long int hash_value = 0;
-
+    
     return hash_value;
 
 }
 void Dictionary::printDict(){
-  for ( vector< vector<string> >::size_type i = 0; i < this->hashTable.size(); i++){
-    for (vector< vector<string> >::size_type j = 0; j < this->hashTable[i].size(); j++){
-      cout << this->hashTable[i][j] << " - ";
-    }
-    cout << endl;
-  }
+
 }
+
+int Dictionary::getBinaryASCII( const string &s){
+
+  //get last eight characters
+  string lastEight = s.substr( s.length()-8 , s.length());
+
+  //convert to binary string
+  string binaryStr = "";
+  for (char& _char : lastEight) {
+	binaryStr +=bitset<8>(_char).to_string();
+  }
+  
+  return stoi(binaryStr);
+}
+

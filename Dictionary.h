@@ -19,21 +19,24 @@ public:
     // Handle collision with separate chaining.
     void insert(string key);
 
-    void linearInsert(string key);
   
     // Remove a key from the dictionary, if it exists.
     void remove(string key);
 
+    //print the indexes you pass through to find the key
     // Return whether a key is found in the dictionary.
     // Print the buckets (both first and second level) accessed during the operation.
     bool find(string key);
 
     // hash function 
-    long long int hashOne(const string &s);
+  int hashOne(int m, const string &s);
 
     //second hash function
-    long long int hashTwo(const string &s);
+    int hashTwo(const string &s);
 
     //print hashtable
     void printDict();
+
+    //convert to binary
+    int getBinaryASCII( const string &s);
 };
