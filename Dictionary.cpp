@@ -26,10 +26,14 @@ void Dictionary::bulkInsert(int n, string *keys) {
   }
   
   //intialize both levels of hashtable                                                                                   
+
+  //push back number of first buckets
   vNode empty;
   for (int i = 0; i < collisions.size(); i++){
     empty.hashFunction = generateSecondHash(collisions[i]);
-    cout << "HF2 for index " << i << ": ";
+
+    //PRINT OUT 2ND LEVEL HASH
+    cout << "HF2 for index " << i << ": " << endl;
     for ( vector<int> x : empty.hashFunction){
       for ( int y: x){
       cout << y;
@@ -37,9 +41,12 @@ void Dictionary::bulkInsert(int n, string *keys) {
       cout<< endl;
     }
     cout << endl;
+
+    //pushback new node
     this->hashTable.push_back(empty);                                                
   }
-  
+
+  //pushback number of second buckets
   for (int i = 0; i < collisions.size(); i++){
     vNode x = this->hashTable[i];
     for ( int j = 0; j < pow(2, log2( pow( collisions[i],2) ) ); j++){
@@ -64,7 +71,7 @@ void Dictionary::bulkInsert(int n, string *keys) {
     cout << keys[i] << ": " << firstIndex << "," << secondIndex << endl;
     
     //insert
-    //this->hashTable[firstIndex].hashTable2[secondIndex] = s;
+    //this->hashTable[firstIndex].hashTable2.at(secondIndex) = s;
     
   }
   

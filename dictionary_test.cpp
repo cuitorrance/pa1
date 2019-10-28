@@ -11,7 +11,24 @@ int main()
     // BulkInsert the keys into the dictionary.
     string strs[] = {"Fred Astaire", "Lauren Bacall", "Brigitte Bardot", "John Belushi", "Ingmar Bergman"};
     int n = 5;
-    dict.bulkInsert(n, strs);
+
+     string strs2[] =
+    {
+        "Fred Astaire",
+        "Lauren Bacall",
+        "Brigitte Bardot",
+        "Humphrey Bogart",
+        "Marlon Brando",
+        "Richard Burton",
+        "James Cagney",
+        "Gary Cooper",
+        "Bette Davis",
+        "Doris Day",
+        "Olivia de Havilland",
+        "James Dean"
+    };
+       int n2 = 12;
+    dict.bulkInsert(n2, strs2);
     
     // Insert "Humphrey Bogart" into the dictionary.
     //dict.insert("Humphrey Bogart");
