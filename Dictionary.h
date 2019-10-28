@@ -42,9 +42,6 @@ public:
 
     //generate second hash function based on collisions
     vector< vector<int> > generateSecondHash( int c);
-
-    //fills in second hash functions based on collisions
-  void addSecondHash(int n, vector<int> collisions);
   
     //generate key from string
     vector<int> generateKey( const string &s);

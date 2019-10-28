@@ -16,14 +16,27 @@ void Dictionary::bulkInsert(int n, string *keys) {
   //generate first hash function
   vector< vector<int> > hf1 = generateFirstHash(n);
   
-  //count collisions for each of the first level buckets
+  //count # of collisions for each of the first level buckets
   vector<int> collisions = countCollisions( n, keys, hf1);
 
+  //PRINT OUT COLLISIONS
+  cout << "COLLISIONS: "<< endl;
+  for ( int i: collisions){
+    cout << i << "|" << endl;
+  }
+  
   //intialize both levels of hashtable                                                                                   
-
   vNode empty;
   for (int i = 0; i < collisions.size(); i++){
-    empty.hashFunction = generateSecondHash(collisions[i] );
+    empty.hashFunction = generateSecondHash(collisions[i]);
+    cout << "HF2 for index " << i << ": ";
+    for ( vector<int> x : empty.hashFunction){
+      for ( int y: x){
+      cout << y;
+      }
+      cout<< endl;
+    }
+    cout << endl;
     this->hashTable.push_back(empty);                                                
   }
   
@@ -33,12 +46,6 @@ void Dictionary::bulkInsert(int n, string *keys) {
       x.hashTable2.push_back("empty");
     }
   }
-
-  cout << "COLLISIONS: ";
-  for ( int i: collisions){
-    cout << collisions[i] << "|";
-  }
-  cout << endl;
     
   //go through keys
   for ( int i = 0; i < n; i++){
@@ -102,7 +109,7 @@ vector< vector<int> > Dictionary::generateSecondHash( int c){
 
     vector< vector<int> > hf(rows, vector<int>(cols));
     
-    srand(time(NULL));
+    //srand(time(NULL));
     for ( unsigned int i = 0; i < rows; i++){
       for ( unsigned int j = 0; j < cols; j++){
 	hf[i][j] = ( rand() % 2 );
@@ -111,14 +118,7 @@ vector< vector<int> > Dictionary::generateSecondHash( int c){
     return hf; 
 }
 
-//creates second level hash functions for each first level row
-void Dictionary::addSecondHash(int n, vector<int> collisions){
-  for (unsigned int i = 0; i < pow( 2, ceil(log2(n)) );i++){
-    hashTable[i].hashFunction = generateSecondHash(collisions[i]);
-  }
-}
-
-//generate key from string                                                                                                                                                       
+//generate key from string                                                                                                                                                      
 vector<int> Dictionary::generateKey( const string &s){
 
   //get last eight characters                                                                                                                                                      
@@ -155,11 +155,22 @@ vector<int> Dictionary::countCollisions( int n , string *keys, vector< vector<in
     collisions[i] = 0;
   }
 
+  cout << "Counting collisions at first level..." << endl;
   //count collisions
   for (unsigned int i = 0; i < n; i++){
     vector<int> key = generateKey( keys[i] );
     int index = getIndex( firstHash, key);
-    collisions[index] += 1;
+    cout << keys[i] << " mapped to index " << index << endl;
+    collisions[index] +=1;
+  }
+  
+  //correct collision count
+  int i = 0;
+  for (int n : collisions){
+    if ( n != 0){
+      collisions[i] -= 1;
+    }
+    i++;
   }
 
   return collisions;
