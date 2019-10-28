@@ -2,10 +2,19 @@
 #include <vector>
 using namespace std;
 
+struct Node{
+  string s;
+  Node* next;
+};
+
+struct vNode {
+  vector< vector<int>> hashFunction;
+  vector< string > hashTable2;
+};
 
 class Dictionary {
 private:
-  vector< vector<string> > hashTable;
+  vector< vNode > hashTable;
 public:
   
     // Insert an input set of n keys to the dictionary. This method should print out the following information:
@@ -28,15 +37,24 @@ public:
     // Print the buckets (both first and second level) accessed during the operation.
     bool find(string key);
 
-    // hash function 
-  int hashOne(int m, const string &s);
+    //generate first hash function
+    vector< vector<int> > generateFirstHash( int n);  
 
-    //second hash function
-    int hashTwo(const string &s);
+    //generate second hash function based on collisions
+    vector< vector<int> > generateSecondHash( int c);
 
-    //print hashtable
-    void printDict();
+    //fills in second hash functions based on collisions
+  void addSecondHash(int n, vector<int> collisions);
+  
+    //generate key from string
+    vector<int> generateKey( const string &s);
 
-    //convert to binary
-    int getBinaryASCII( const string &s);
+    //count number of collisions at each level of first hash
+  vector<int> countCollisions( int n , string *keys, vector<vector<int>> firstHash);
+
+    //gets index from multiplying matrices
+  int getIndex (vector< vector<int> > a, vector<int> b);
+
+  //print hashTable
+  void printDict();
 };
