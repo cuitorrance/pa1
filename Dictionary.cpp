@@ -119,10 +119,14 @@ vector<int> Dictionary::generateKey( const string &s){
   }
 
   //put string into vector                                                                                                                                                           
-  vector<int> v(binaryStr.size());
+  vector<int> v;
 
   for (unsigned i = 0; i < binaryStr.size(); i++){
-    v.push_back( binaryStr[i] - '0' );
+    if (binaryStr[i] == '0'){
+      v.push_back(0);
+    }else if (binaryStr[i] == '1'){
+      v.push_back(1);
+    }
   }
 
   return v;
@@ -134,7 +138,7 @@ vector<int> Dictionary::generateKey( const string &s){
 vector<int> Dictionary::countCollisions( int n , string *keys, vector< vector<int> > firstHash){
 
   //make vector to keep count of collisions
-  vector<int> collisions(pow(2, log2(n)));
+  vector<int> collisions(pow(2, ceil(log2(n)) ));
   for ( unsigned int i = 0; i < pow(2, log2(n)); i++){
     collisions[i] = 0;
   }
@@ -165,7 +169,7 @@ int Dictionary::getIndex( vector< vector<int> > a, vector<int> b){
 
     //convert binary vector to decimal value                                                                                                                                        
     int sumValue = 0;
-    for ( unsigned int i = 0, j = a.size() ; i < a.size(); i++){
+    for ( unsigned int i = 0, j = result.size() ; i < result.size(); i++){
       sumValue += (pow(2, j-1) * result[i]);
       j--;
     }
