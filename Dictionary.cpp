@@ -12,48 +12,66 @@
 using namespace std;
 
 void Dictionary::bulkInsert(int n, string *keys) {
+
+  cout << "-----------------------------------" << endl;
+  cout << "COUNTING COLLISIONS: " << endl;
   
   //generate first hash function
   vector< vector<int> > hf1 = generateFirstHash(n);
+  
   
   //count # of collisions for each of the first level buckets
   vector<int> collisions = countCollisions( n, keys, hf1);
 
   //PRINT OUT COLLISIONS
   cout << "COLLISIONS: "<< endl;
-  for ( int i: collisions){
-    cout << i << "|" << endl;
+  for ( int i= 0; i < collisions.size(); i++){
+    cout << collisions[i]  << " collsion at index " << i << endl;
+  }
+
+
+  //PRINT OUT FIRST HASH FUNCTION
+  cout << "--------------------------------------" << endl;
+  cout << "FIRST LEVEL HASH: " <<endl;
+  cout << "HF1:" << endl;
+  for ( vector<int> i : hf1){
+    for ( int j: i){
+      cout << j;
+    }
+    cout << endl;
   }
   
-  //intialize both levels of hashtable                                                                                   
-
-  //push back number of first buckets
+  //intialize first level of hashtable
   vNode empty;
-  for (int i = 0; i < collisions.size(); i++){
-    empty.hashFunction = generateSecondHash(collisions[i]);
+  vector< vNode > v(collisions.size(), empty); 
+  this->hashTable = v;
 
+  cout << "------------------------------------" << endl;
+  cout << "SECOND LEVEL HASH:" << endl;
+  
+  //push back number of second buckets
+  for (int i = 0; i < collisions.size(); i++){
+    this->hashTable[i].hashFunction = generateSecondHash(collisions[i]);
+
+    for ( int j = 0; j < pow( 2 , (  pow(2, ceil(log2(pow(collisions[i], 2))))) ); j++){
+      this->hashTable[i].hashTable2.push_back("empty");
+    }
+      
     //PRINT OUT 2ND LEVEL HASH
     cout << "HF2 for index " << i << ": " << endl;
-    for ( vector<int> x : empty.hashFunction){
+    for ( vector<int> x : this->hashTable[i].hashFunction ){
       for ( int y: x){
       cout << y;
       }
       cout<< endl;
     }
     cout << endl;
-
-    //pushback new node
-    this->hashTable.push_back(empty);                                                
+  
   }
 
-  //pushback number of second buckets
-  for (int i = 0; i < collisions.size(); i++){
-    vNode x = this->hashTable[i];
-    for ( int j = 0; j < pow(2, log2( pow( collisions[i],2) ) ); j++){
-      x.hashTable2.push_back("empty");
-    }
-  }
-    
+  
+  cout << "-------------------------------------" << endl;
+  cout << "ELEMENTS: " << endl;
   //go through keys
   for ( int i = 0; i < n; i++){
     string s = keys[i];
@@ -63,15 +81,24 @@ void Dictionary::bulkInsert(int n, string *keys) {
 
     //find first index
     int firstIndex = getIndex(hf1, key);
-    
-    //find second index
-    int secondIndex = getIndex(this->hashTable[firstIndex].hashFunction ,key);
+
+    int secondIndex = 0;
+    if (collisions[firstIndex] != 0){
+      //find second index
+      secondIndex = getIndex(this->hashTable[firstIndex].hashFunction ,key);
+    }
 
     //testing
-    cout << keys[i] << ": " << firstIndex << "," << secondIndex << endl;
+    cout << keys[i] << ": inserted at (" << firstIndex << "," << secondIndex << ")"<< endl;
+
+    cout << "KEY: ";
+    for ( int i: key){
+      cout << i;
+    }
+    cout << endl << "------------------" << endl;
     
     //insert
-    //this->hashTable[firstIndex].hashTable2.at(secondIndex) = s;
+    this->hashTable[firstIndex].hashTable2.at(secondIndex) = s;
     
   }
   
@@ -110,8 +137,9 @@ vector< vector<int> > Dictionary::generateFirstHash( int n){
 }
 
 //generate second hash function based on collisions                                                                                                                              
-vector< vector<int> > Dictionary::generateSecondHash( int c){                                                                                                                           
-    int rows = ceil( pow(2, log2(pow(c, 2)) ));
+vector< vector<int> > Dictionary::generateSecondHash( int c){
+
+    int rows = pow(2, ceil(log2(pow(c, 2))));
     int cols = 64;
 
     vector< vector<int> > hf(rows, vector<int>(cols));
@@ -158,11 +186,11 @@ vector<int> Dictionary::countCollisions( int n , string *keys, vector< vector<in
 
   //make vector to keep count of collisions
   vector<int> collisions(pow(2, ceil(log2(n)) ));
-  for ( unsigned int i = 0; i < pow(2, log2(n)); i++){
+  for ( unsigned int i = 0; i < pow(2, ceil(log2(n))); i++){
     collisions[i] = 0;
   }
 
-  cout << "Counting collisions at first level..." << endl;
+  //cout << "Counting collisions at first level..." << endl;
   //count collisions
   for (unsigned int i = 0; i < n; i++){
     vector<int> key = generateKey( keys[i] );
@@ -185,25 +213,34 @@ vector<int> Dictionary::countCollisions( int n , string *keys, vector< vector<in
 
 //get index by multiplying hashfunction and key
 int Dictionary::getIndex( vector< vector<int> > a, vector<int> b){
+
+  //if (a[0].size() != b.size()){
+  //cout << "MATRIX ERROR" << endl;
+  //}
+  //cout << "hf size = " << a.size() << "x" << a[0].size() << endl;
+  //cout << "key size = " << b.size() << "x" << 1 << endl;
   
   vector<int> result(a.size());
-  
+
   for ( unsigned int i = 0; i < a.size(); i++){
       int rowSum = 0;
       for ( unsigned int j = 0; j < a[i].size(); j++){
+	//cout << rowSum << endl;
         rowSum += ( a[i][j] * b[j] );
       }
       result.push_back(rowSum % 2);
       rowSum = 0;
     }
 
-    //convert binary vector to decimal value                                                                                                                                        
+    //convert binary vector to decimal value
+
+    //cout << "CONVERTING BINARY" << endl;
     int sumValue = 0;
     for ( unsigned int i = 0, j = result.size() ; i < result.size(); i++){
+      //cout << result[i] << "*" << "(2^" << j-1 << ")" << endl;
       sumValue += (pow(2, j-1) * result[i]);
       j--;
     }
-
     return sumValue;
 }
 
@@ -211,7 +248,7 @@ int Dictionary::getIndex( vector< vector<int> > a, vector<int> b){
 void Dictionary::printDict(){
   for ( unsigned int i = 0; this->hashTable.size();i++){
     for ( unsigned int j = 0; this->hashTable[i].hashTable2.size() ;j++){
-      cout <<  this->hashTable[i].hashTable2[j] << "|";
+      cout <<  hashTable[i].hashTable2[j] << "|";
     }
     cout << endl;
   }

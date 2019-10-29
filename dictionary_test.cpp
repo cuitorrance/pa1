@@ -27,8 +27,8 @@ int main()
         "Olivia de Havilland",
         "James Dean"
     };
-       int n2 = 12;
-    dict.bulkInsert(n2, strs2);
+    int n2 = 12;
+    dict.bulkInsert(n, strs);
     
     // Insert "Humphrey Bogart" into the dictionary.
     //dict.insert("Humphrey Bogart");
