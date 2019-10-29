@@ -28,7 +28,7 @@ int main()
         "James Dean"
     };
     int n2 = 12;
-    dict.bulkInsert(n, strs);
+    dict.bulkInsert(n2, strs2);
     
     // Insert "Humphrey Bogart" into the dictionary.
     //dict.insert("Humphrey Bogart");
@@ -44,7 +44,7 @@ int main()
 
     //cout << "----------------" << endl << "HASH TABLE" << endl;
     
-    //dict.printDict();
+    dict.printDict();
     
     return 0;
 }

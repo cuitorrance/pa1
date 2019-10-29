@@ -23,17 +23,18 @@ void Dictionary::bulkInsert(int n, string *keys) {
   //count # of collisions for each of the first level buckets
   vector<int> collisions = countCollisions( n, keys, hf1);
 
+  cout << "-----------------------------------" << endl;
   //PRINT OUT COLLISIONS
   cout << "COLLISIONS: "<< endl;
   for ( int i= 0; i < collisions.size(); i++){
-    cout << collisions[i]  << " collsion at index " << i << endl;
+    cout << collisions[i]  << " elements at index " << i << endl;
   }
 
 
   //PRINT OUT FIRST HASH FUNCTION
   cout << "--------------------------------------" << endl;
   cout << "FIRST LEVEL HASH: " <<endl;
-  cout << "HF1:" << endl;
+  cout << "First Level Hash Function:" << endl;
   for ( vector<int> i : hf1){
     for ( int j: i){
       cout << j;
@@ -53,12 +54,12 @@ void Dictionary::bulkInsert(int n, string *keys) {
   for (int i = 0; i < collisions.size(); i++){
     this->hashTable[i].hashFunction = generateSecondHash(collisions[i]);
 
-    for ( int j = 0; j < pow( 2 , (  pow(2, ceil(log2(pow(collisions[i], 2))))) ); j++){
-      this->hashTable[i].hashTable2.push_back("empty");
+    for ( int j = 0; j <  pow( 2, (pow(2, ceil(log2(pow(collisions[i], 2)))) )); j++){
+      this->hashTable[i].hashTable2.push_back("");
     }
       
     //PRINT OUT 2ND LEVEL HASH
-    cout << "HF2 for index " << i << ": " << endl;
+    cout << "Second Level Hash Function for Index " << i << ": " << endl;
     for ( vector<int> x : this->hashTable[i].hashFunction ){
       for ( int y: x){
       cout << y;
@@ -95,7 +96,8 @@ void Dictionary::bulkInsert(int n, string *keys) {
     for ( int i: key){
       cout << i;
     }
-    cout << endl << "------------------" << endl;
+    
+    cout <<endl<< endl;
     
     //insert
     this->hashTable[firstIndex].hashTable2.at(secondIndex) = s;
@@ -200,13 +202,13 @@ vector<int> Dictionary::countCollisions( int n , string *keys, vector< vector<in
   }
   
   //correct collision count
-  int i = 0;
-  for (int n : collisions){
-    if ( n != 0){
-      collisions[i] -= 1;
-    }
-    i++;
-  }
+  //int i = 0;
+  //for (int n : collisions){
+  //if ( n != 0){
+  // collisions[i] -= 1;
+  //}
+  //i++;
+  //}
 
   return collisions;
 }
@@ -246,10 +248,21 @@ int Dictionary::getIndex( vector< vector<int> > a, vector<int> b){
 
 //print hashtable
 void Dictionary::printDict(){
-  for ( unsigned int i = 0; this->hashTable.size();i++){
-    for ( unsigned int j = 0; this->hashTable[i].hashTable2.size() ;j++){
-      cout <<  hashTable[i].hashTable2[j] << "|";
+  cout << "---------------------------------" << endl;
+  cout << "PRINTING HASHTABLE (EXCLUDING EMPTY SLOTS): " << endl;
+
+  //cout << hashTable.size() << endl;
+  for ( unsigned int i = 0; i < this->hashTable.size();i++){
+    cout << "ROW " << i << ": ";
+    for ( unsigned int j = 0; j < this->hashTable[i].hashTable2.size() ;j++){
+      if ( hashTable[i].hashTable2[j].compare("") == 0){
+      }else{
+	
+	cout <<  hashTable[i].hashTable2[j] << "|";
+
+      }
     }
     cout << endl;
   }
+  cout << "----------------------------------" << endl;
 }
