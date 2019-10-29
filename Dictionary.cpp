@@ -33,6 +33,11 @@ void Dictionary::bulkInsert(int n, string *keys) {
     cout << collisions[i]  << " elements at index " << i << endl;
   }
 
+  int sum = 0;
+  for ( int i =0; i <collisions.size();i++){
+    sum += pow( collisions[i],2);
+  }
+  cout << "sum of squares: " << sum << endl;
 
   //PRINT OUT FIRST HASH FUNCTION
   cout << "--------------------------------------" << endl;
