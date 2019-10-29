@@ -15,11 +15,14 @@ void Dictionary::bulkInsert(int n, string *keys) {
 
   cout << "-----------------------------------" << endl;
   cout << "COUNTING COLLISIONS: " << endl;
-  
+
+    
   //generate first hash function
-  vector< vector<int> > hf1 = generateFirstHash(n);
-  
-  
+  vector< vector<int> >hf1 = generateFirstHash(n);
+
+  //this->elementsToHash = n;
+  this->firstHashFunction = hf1;
+ 
   //count # of collisions for each of the first level buckets
   vector<int> collisions = countCollisions( n, keys, hf1);
 
@@ -54,8 +57,12 @@ void Dictionary::bulkInsert(int n, string *keys) {
   for (int i = 0; i < collisions.size(); i++){
     this->hashTable[i].hashFunction = generateSecondHash(collisions[i]);
 
+    Node n;
+    n.s = "";
+    n.next = NULL;
+    
     for ( int j = 0; j <  pow( 2, (pow(2, ceil(log2(pow(collisions[i], 2)))) )); j++){
-      this->hashTable[i].hashTable2.push_back("");
+      this->hashTable[i].hashTable2.push_back(n);
     }
       
     //PRINT OUT 2ND LEVEL HASH
@@ -69,16 +76,15 @@ void Dictionary::bulkInsert(int n, string *keys) {
     cout << endl;
   
   }
-
   
   cout << "-------------------------------------" << endl;
   cout << "ELEMENTS: " << endl;
   //go through keys
   for ( int i = 0; i < n; i++){
-    string s = keys[i];
+    string str = keys[i];
 
     //generate key
-    vector<int> key = generateKey(s);
+    vector<int> key = generateKey(str);
 
     //find first index
     int firstIndex = getIndex(hf1, key);
@@ -100,23 +106,55 @@ void Dictionary::bulkInsert(int n, string *keys) {
     cout <<endl<< endl;
     
     //insert
-    this->hashTable[firstIndex].hashTable2.at(secondIndex) = s;
+    this->hashTable[firstIndex].hashTable2.at(secondIndex).s = str;
     
+  }  
+}
+
+
+
+void Dictionary::insert(string key) {
+
+  vector<int> keyOfkey = generateKey(key);
+  
+  int firstIndex = getIndex(this->firstHashFunction, keyOfkey);
+
+  int secondIndex = getIndex(this->hashTable[firstIndex].hashFunction, keyOfkey);
+
+  
+  Node *ins = new Node;
+  ins->s = key;
+  ins->next = NULL;  
+
+  if ( hashTable[firstIndex].hashTable2[secondIndex].s.compare("") == 0){
+    cout << "no collision for " << key << endl;
+    hashTable[firstIndex].hashTable2[secondIndex].s = key;
+  }else{
+    cout << "collision at index: (" << firstIndex << "," << secondIndex << ") for " << key << endl; 
+    this->hashTable[firstIndex].hashTable2[secondIndex].next = ins;
   }
   
 }
 
-void Dictionary::insert(string key) {
+void Dictionary::remove(string key) {
+  vector<int> keyOfkey = generateKey(key);
+  
+  int firstIndex = getIndex(this->firstHashFunction, keyOfkey);
 
+  int secondIndex = getIndex(this->hashTable[firstIndex].hashFunction, keyOfkey);
+
+  if ( hashTable[firstIndex].hashTable2[secondIndex].s.compare(key) == 0){
+    cout << "removed " << key << endl;
+    hashTable[firstIndex].hashTable2[secondIndex].s = "";
+  }else{
+    cout << "does not exist" << endl;
+  }
   
 }
 
-void Dictionary::remove(string key) {
-
-}
-
 bool Dictionary::find(string key) {
-    return false;
+
+  return false;
 }
 
 //generate first hash function                                                                                                                                                   
@@ -248,21 +286,31 @@ int Dictionary::getIndex( vector< vector<int> > a, vector<int> b){
 
 //print hashtable
 void Dictionary::printDict(){
-  cout << "---------------------------------" << endl;
+  cout << "##########################################" << endl;
   cout << "PRINTING HASHTABLE (EXCLUDING EMPTY SLOTS): " << endl;
 
   //cout << hashTable.size() << endl;
   for ( unsigned int i = 0; i < this->hashTable.size();i++){
     cout << "ROW " << i << ": ";
     for ( unsigned int j = 0; j < this->hashTable[i].hashTable2.size() ;j++){
-      if ( hashTable[i].hashTable2[j].compare("") == 0){
+      if ( (hashTable[i].hashTable2[j].s).compare("") == 0){
       }else{
 	
-	cout <<  hashTable[i].hashTable2[j] << "|";
+	cout <<  hashTable[i].hashTable2[j].s;
 
+	Node* newNode = hashTable[i].hashTable2[j].next;
+
+	//go through sep chain
+	while (newNode != NULL){
+	  cout << "->" << newNode->s;
+	  newNode = newNode->next;
+	}
+
+	cout << "|";
+	
       }
     }
     cout << endl;
   }
-  cout << "----------------------------------" << endl;
+  cout << "###########################################" << endl;
 }

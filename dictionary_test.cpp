@@ -28,13 +28,21 @@ int main()
         "James Dean"
     };
     int n2 = 12;
-    dict.bulkInsert(n2, strs2);
+    dict.bulkInsert(n, strs);
+
+    dict.printDict();
+    
+    cout << "--------------------------" << endl;
+    cout << "INSERTING.. " << endl;
     
     // Insert "Humphrey Bogart" into the dictionary.
-    //dict.insert("Humphrey Bogart");
+    dict.insert("Humphrey Bogart");
 
+    cout << "--------------------------" << endl;
+    cout << "REMOVING.. " << endl;
+  
     // Remove "Lauren Bacall" from the dictionary.
-    //dict.remove("Lauren Bacall");
+    dict.remove("Lauren Bacall");
 
     // Find "Fred Astaire" in the dictionary.
     //cout << dict.find("Fred Astaire") << endl;
@@ -42,7 +50,7 @@ int main()
     // Find "Lauren Bacall" in the dictionary.
     //cout << dict.find("Lauren Bacall") << endl;
 
-    //cout << "----------------" << endl << "HASH TABLE" << endl;
+    //cout << "----------------" << endl << "FINAL HASH TABLE" << endl;
     
     dict.printDict();
     

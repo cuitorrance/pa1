@@ -9,12 +9,14 @@ struct Node{
 
 struct vNode {
   vector< vector<int>> hashFunction;
-  vector< string > hashTable2;
+  vector< Node > hashTable2;
 };
 
 class Dictionary {
 private:
+  //int elementsToHash;
   vector< vNode > hashTable;
+  vector< vector<int> > firstHashFunction;
 public:
   
     // Insert an input set of n keys to the dictionary. This method should print out the following information:
