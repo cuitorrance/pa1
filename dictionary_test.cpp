@@ -44,11 +44,14 @@ int main()
     // Remove "Lauren Bacall" from the dictionary.
     dict.remove("Lauren Bacall");
 
-    // Find "Fred Astaire" in the dictionary.
-    //cout << dict.find("Fred Astaire") << endl;
+    cout << "--------------------------" << endl;
+    cout << "FINDING.. " << endl;
+  
+    //Find "Fred Astaire" in the dictionary.
+    cout << dict.find("Fred Astaire") << endl;
 
     // Find "Lauren Bacall" in the dictionary.
-    //cout << dict.find("Lauren Bacall") << endl;
+    cout << dict.find("Lauren Bacall") << endl;
 
     //cout << "----------------" << endl << "FINAL HASH TABLE" << endl;
     

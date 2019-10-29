@@ -153,8 +153,25 @@ void Dictionary::remove(string key) {
 }
 
 bool Dictionary::find(string key) {
+  bool found = false;
 
-  return false;
+  vector<int> keyOfkey = generateKey(key);
+  
+  int firstIndex = getIndex(this->firstHashFunction, keyOfkey);
+
+  int secondIndex = getIndex(this->hashTable[firstIndex].hashFunction, keyOfkey);
+
+  if ( hashTable[firstIndex].hashTable2[secondIndex].s.compare(key) == 0){
+    cout << "found " << key << endl;
+    found = true;
+    //hashTable[firstIndex].hashTable2[secondIndex].s = "";
+  }else{
+    found = false;
+    cout << key <<  " does not exist" << endl;
+  }
+
+  cout << "Looked at index (" << firstIndex << "," << secondIndex << ")" << endl;
+  return found;
 }
 
 //generate first hash function                                                                                                                                                   
