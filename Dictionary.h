@@ -54,6 +54,5 @@ public:
     //gets index from multiplying matrices
   int getIndex (vector< vector<int> > a, vector<int> b);
 
-  //print hashTable
   void printDict();
 };

@@ -15,7 +15,6 @@ void Dictionary::bulkInsert(int n, string *keys) {
 
   cout << "-----------------------------------" << endl;
   cout << "COUNTING COLLISIONS: " << endl;
-
     
   //generate first hash function
   vector< vector<int> >hf1 = generateFirstHash(n);
@@ -82,8 +81,8 @@ void Dictionary::bulkInsert(int n, string *keys) {
   
   }
   
-  cout << "-------------------------------------" << endl;
-  cout << "ELEMENTS: " << endl;
+  //cout << "-------------------------------------" << endl;
+  //cout << "ELEMENTS: " << endl;
   //go through keys
   for ( int i = 0; i < n; i++){
     string str = keys[i];
@@ -101,14 +100,14 @@ void Dictionary::bulkInsert(int n, string *keys) {
     }
 
     //testing
-    cout << keys[i] << ": inserted at (" << firstIndex << "," << secondIndex << ")"<< endl;
+    //cout << keys[i] << ": inserted at (" << firstIndex << "," << secondIndex << ")"<< endl;
 
-    cout << "KEY: ";
-    for ( int i: key){
-      cout << i;
-    }
+    //cout << "KEY: ";
+    //for ( int i: key){
+    //cout << i;
+    //}
     
-    cout <<endl<< endl;
+    //cout <<endl<< endl;
     
     //insert
     this->hashTable[firstIndex].hashTable2.at(secondIndex).s = str;
@@ -121,21 +120,21 @@ void Dictionary::bulkInsert(int n, string *keys) {
 void Dictionary::insert(string key) {
 
   vector<int> keyOfkey = generateKey(key);
+
+  cout << endl << "inserting key " << key << endl;
   
   int firstIndex = getIndex(this->firstHashFunction, keyOfkey);
 
   int secondIndex = getIndex(this->hashTable[firstIndex].hashFunction, keyOfkey);
-
-  
-  Node *ins = new Node;
-  ins->s = key;
-  ins->next = NULL;  
-
+ 
   if ( hashTable[firstIndex].hashTable2[secondIndex].s.compare("") == 0){
     cout << "no collision for " << key << endl;
     hashTable[firstIndex].hashTable2[secondIndex].s = key;
   }else{
-    cout << "collision at index: (" << firstIndex << "," << secondIndex << ") for " << key << endl; 
+    cout << "collision at index: (" << firstIndex << "," << secondIndex << ") for " << key << endl;
+    Node *ins = new Node;
+    ins->s = key;
+    ins->next = NULL; 
     this->hashTable[firstIndex].hashTable2[secondIndex].next = ins;
   }
   
@@ -143,6 +142,8 @@ void Dictionary::insert(string key) {
 
 void Dictionary::remove(string key) {
   vector<int> keyOfkey = generateKey(key);
+
+  cout << endl << "removing key " << key<< endl;
   
   int firstIndex = getIndex(this->firstHashFunction, keyOfkey);
 
@@ -160,22 +161,23 @@ void Dictionary::remove(string key) {
 bool Dictionary::find(string key) {
   bool found = false;
 
+  cout << endl << "finding key " << key << endl;
   vector<int> keyOfkey = generateKey(key);
   
   int firstIndex = getIndex(this->firstHashFunction, keyOfkey);
 
   int secondIndex = getIndex(this->hashTable[firstIndex].hashFunction, keyOfkey);
 
+  cout << "Looking at index (" << firstIndex << "," << secondIndex << ")" << endl;
+  
   if ( hashTable[firstIndex].hashTable2[secondIndex].s.compare(key) == 0){
-    cout << "found " << key << endl;
+    cout << "found key " << key << endl;
     found = true;
     //hashTable[firstIndex].hashTable2[secondIndex].s = "";
   }else{
     found = false;
-    cout << key <<  " does not exist" << endl;
+    cout << "key " << key <<  " does not exist" << endl;
   }
-
-  cout << "Looked at index (" << firstIndex << "," << secondIndex << ")" << endl;
   return found;
 }
 
@@ -218,8 +220,16 @@ vector< vector<int> > Dictionary::generateSecondHash( int c){
 //generate key from string                                                                                                                                                      
 vector<int> Dictionary::generateKey( const string &s){
 
-  //get last eight characters                                                                                                                                                      
-  string lastEight = s.substr( s.length()-8 , s.length());
+  string copy = s;
+  
+  //if string is less than 8
+  while (copy.length() < 8){
+    copy = copy + " ";
+  }
+  
+  //get last eight characters
+  
+  string lastEight = copy.substr( copy.length()-8 , copy.length());
 
   //convert to binary string                                                                                                                                                         
   string binaryStr = "";
